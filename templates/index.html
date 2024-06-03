@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fuel Calibration App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css', _external=True) }}">
+</head>
+<body>
+    <h1>Fuel Calibration App</h1>
+    <form method="POST" action="{{ url_for('index') }}">
+        <label for="depth_inches">Enter fuel level in inches:</label>
+        <input type="number" step="0.01" name="depth_inches" required><br>
+
+        <label for="line_up">Enter Gen line up:</label>
+        <input type="text" name="line_up" required><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <h2>Calibration History</h2>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Gen Line Up</th>
+            <th>Fuel Level</th>
+            <th>Needed Gallons</th>
+            <th>Alarm</th>
+        </tr>
+        {% for calibration in calibrations %}
+        <tr>
+            <td>{{ calibration.date }}</td>
+            <td>{{ calibration.line_up }}</td>
+            <td>{{ calibration.fuel_percentage }}%</td>
+            <td>{{ calibration.needed_gallons }}</td>
+            <td>
+                {% if calibration.depth_inches > 19 %}
+                    High fuel level!
+                {% elif calibration.depth_inches < 15 %}
+                    Low fuel level!
+                {% else %}
+                    Normal fuel level!
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <footer>Copyright &copy; Engr. Paul Omogie</footer>
+</body>
+</html>
